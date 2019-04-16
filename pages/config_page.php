@@ -67,61 +67,6 @@ print_manage_menu('manage_plugin_page.php');
 
                                         <tr>
                                             <td class="category">
-                                                <?php echo plugin_lang_get('url_webhooks') ?>
-                                                <br>
-                                                <sup>Example:</sup>
-                                                <pre>array (
- 'Project Title': 'http://xyz.com/hooks/123'
- 'Project Title 2': 'http://xyz.com/hooks/456'
-)</pre>
-
-                                            </td>
-                                            <td colspan="2">
-                                                <p>
-                                                    Specifies the mapping between Mantis project names and Mattermost
-                                                    webhooks.
-                                                </p>
-                                                <p>
-                                                    Option name is <strong>plugin_Mattermost_url_webhooks</strong> and
-                                                    is an
-                                                    array of 'Mantis project name' => 'Mattermost webhook'.
-                                                    Array options must be set using the <a href="adm_config_report.php">Configuration
-                                                        Report</a> screen.
-                                                    The current value of this option is:
-                                                <pre><?php var_export(plugin_config_get('url_webhooks')) ?></pre>
-                                                </p>
-                                            </td>
-                                        </tr>
-
-                                        <tr>
-                                            <td class="category">
-                                                <?php echo plugin_lang_get('channels') ?>
-                                                <br>
-                                                <sup>Example:</sup>
-                                                <pre>array (
- 'Project Title': 'project-title-channel-slug'
- 'Project Title 2': 'project-title-channel-slug-2'
-)</pre>
-                                            </td>
-                                            <td colspan="2">
-                                                <p>
-                                                    Specifies the mapping between Mantis project names and Mattermost
-                                                    #channels.
-                                                </p>
-                                                <p>
-                                                    Option name is <strong>plugin_Mattermost_channels</strong> and is an
-                                                    array of 'Mantis project name' => 'Mattermost channel name'.
-                                                    Array options must be set using the <a href="adm_config_report.php">Configuration
-                                                        Report</a> screen.
-                                                    The current value of this option is:
-                                                <pre><?php var_export(plugin_config_get('channels')) ?></pre>
-                                                </p>
-                                            </td>
-                                        </tr>
-
-
-                                        <tr>
-                                            <td class="category">
                                                 <?php echo plugin_lang_get('bot_name') ?>
                                             </td>
                                             <td colspan="2">
@@ -136,9 +81,9 @@ print_manage_menu('manage_plugin_page.php');
                                             </td>
                                             <td colspan="2">
                                                 <p>
-                                                    Can be either a URL pointing to small image or an emoji of the form
+                                                    Kann entweder eine URL sein, die auf ein kleines Bild zeigt, oder ein Emoji der Form
                                                     :emoji:</br>
-                                                    Defaults to the Mantis logo.
+                                                    Standardmäßig ist das Mantis-Logo voreingestellt.
                                                 </p>
                                                 <input type="text" name="bot_icon"
                                                        value="<?php echo plugin_config_get('bot_icon') ?>"/>
@@ -169,32 +114,28 @@ print_manage_menu('manage_plugin_page.php');
                                             </td>
                                         </tr>
 
-
-
-
                                         <tr>
                                             <td class="category">
                                                 <?php echo plugin_lang_get('columns') ?>
                                             </td>
                                             <td colspan="2">
                                                 <p>
-                                                    Specifies the bug fields that should be attached to the Mattermost
-                                                    notifications.
+                                                    Gibt die Fehlerfelder an, die an das Mattermost angehängt werden sollen.
+                                                    Benachrichtigungen.
                                                 </p>
                                                 <p>
-                                                    Option name is <strong>plugin_Mattermost_columns</strong> and is an
-                                                    array
-                                                    of bug column names.
-                                                    Array options must be set using the <a href="adm_config_report.php">Configuration
-                                                        Report</a> screen.
+                                                    Der Optionsname ist <stark>plugin_Mattermost_columns</stark> und ist ein
+                                                    Reihe
+                                                    von Fehlerspaltennamen.
+                                                    Array-Optionen müssen über die <a href="adm_config_report.php">Konfiguration eingestellt werden.</a>
                                                     <?php
                                                     $t_columns = columns_get_all(@$t_project_id);
-                                                    $t_all     = implode(', ', $t_columns);
+                                                    $t_all = implode(', ', $t_columns);
                                                     ?>
-                                                    Available column names are:
+                                                    Verfügbare Spaltennamen sind:
                                                 <div><textarea name="all_columns" readonly="readonly" cols="80"
                                                                rows="5"><?php echo $t_all ?></textarea></div>
-                                                The current value of this option is:
+                                                Der aktuelle Wert dieser Option ist:
                                                 <pre><?php var_export(plugin_config_get('columns')) ?></pre>
                                                 </p>
                                             </td>
@@ -206,15 +147,17 @@ print_manage_menu('manage_plugin_page.php');
                                             </td>
                                             <td colspan="2">
                                                 <p>
-                                                    Specifies the mapping between Mantis and Mattermost user names.
+                                                    Gibt die Zuordnung zwischen Mantis und Mattermost Benutzernamen an.
                                                 </p>
                                                 <p>
-                                                    Option name is <strong>plugin_Mattermost_usernames</strong> and is
-                                                    an
-                                                    array of 'Mantis user name' => 'Mattermost user name'.
-                                                    Array options must be set using the <a href="adm_config_report.php">Configuration
-                                                        Report</a> screen.
-                                                    The current value of this option is:
+                                                    Der Optionsname ist <stark>plugin_Mattermost_usernames</stark> und ist
+                                                    ein
+                                                    Array of 'Mantis Benutzername' => 'Mattermost Benutzername'.
+                                                    Alle Benutzernamen ohne Mapping werden 1:1 von Mantis an Mattermost weitergegeben. Dieses Array kann verwendet werden,
+                                                    um unterschiedliche Benutzernamen in den Systemen zu korrigieren oder um bestimmte Nachrichten an andere Mattermost
+                                                    Benutzer umzuleiten.
+                                                    Array-Optionen müssen über die <a href="adm_config_report.php">Konfiguration eingestellt werden.</a>
+                                                    Der aktuelle Wert dieser Option ist:
                                                 <pre><?php var_export(plugin_config_get('usernames')) ?></pre>
                                                 </p>
                                             </td>
