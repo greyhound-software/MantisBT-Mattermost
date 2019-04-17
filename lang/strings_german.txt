@@ -40,7 +40,7 @@ $s_plugin_Mattermost_bugnote_updated  = "[%s] %s bearbeitete den Kommentar für 
 $s_plugin_Mattermost_bugnote_deleted  = "[%s] %s löschte den Kommentar für <%s|%s>.";
 $s_plugin_Mattermost_no_user          = '(niemand)';
 $s_plugin_Mattermost_unknown_field    = '(konnte das Feld "%s" nicht rendern)';
-$s_plugin_Mattermost_skip             = 'Keine Benachrichtigung an Mettermost senden';
+$s_plugin_Mattermost_skip             = 'Keine Benachrichtigung an Mattermost senden';
 $s_plugin_Mattermost_action_update    = 'Update';
 
 $MANTIS_ERROR['plugin_Mattermost_ERROR_NO_CURL']     = 'Das Mattermost Plugin benötigt die cURL PHP Erweiterung (http://php.net/curl)';

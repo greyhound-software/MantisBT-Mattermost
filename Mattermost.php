@@ -76,6 +76,7 @@ class MattermostPlugin extends MantisPlugin {
       'EVENT_UPDATE_BUG' => 'bug_update',
       'EVENT_BUG_DELETED' => 'bug_deleted',
       'EVENT_BUG_ACTION' => 'bug_action',
+      'EVENT_BUG_ACTIONGROUP_FORM' => 'bugnote_add_form',
       'EVENT_BUGNOTE_ADD' => 'bugnote_add_edit',
       'EVENT_BUGNOTE_EDIT' => 'bugnote_add_edit',
       'EVENT_BUGNOTE_ADD_FORM' => 'bugnote_add_form',
