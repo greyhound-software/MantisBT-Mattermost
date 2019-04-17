@@ -83,9 +83,10 @@ class MattermostPlugin extends MantisPlugin {
   }
 
   public function bugnote_add_form($event, $bug_id) {
-    if (substr($_SERVER['PHP_SELF'], -(strlen('/bug_update_page.php'))) !== '/bug_update_page.php') {
-      return;
-    }
+    // if (substr($_SERVER['PHP_SELF'], -(strlen('/bug_update_page.php'))) !== '/bug_update_page.php'
+    // && substr($_SERVER['PHP_SELF'], -(strlen('/bug_change_status_page.php'))) !== '/bug_change_status_page.php') {
+    //   return;
+    // }
 
     echo '<tr>';
     echo '<th class="category">Mattermost</th>';
@@ -222,6 +223,7 @@ class MattermostPlugin extends MantisPlugin {
       }
       else if($bugnote)
       {
+        $this->oldBug = false;
         $this->bugnote_add_edit('EVENT_BUGNOTE_ADD', $bug->id, $bugnote->id);
         return;
       }
@@ -353,6 +355,7 @@ class MattermostPlugin extends MantisPlugin {
     }
 
     $this->notify($msg, $this->get_webhook(), $channel, $attachments);
+    $this->skip = true; // Folgende Events auf jeden Fall blockieren
   }
 
   public function bug_report($event, $bug, $bug_id) {
@@ -366,18 +369,22 @@ class MattermostPlugin extends MantisPlugin {
   public function bug_action($event, $action, $bug_id) {
     $this->skip = $this->skip || gpc_get_bool('mattermost_skip') || plugin_config_get('skip_bulk');
 
+    if($this->skip)
+      return;
+
     if ($action !== 'DELETE') {
       $bug = bug_get($bug_id);
       $this->bug_report_update('EVENT_UPDATE_BUG', $bug, $bug_id);
     }
-    else
-      $this->bug_deleted('EVENT_BUG_DELETED', $bug_id);
   }
 
   public function bug_deleted($event, $bug_id) {
     $bug = bug_get($bug_id);
 
     $this->skip = $this->skip || gpc_get_bool('mattermost_skip') || $bug->view_state == VS_PRIVATE;
+
+    if($this->skip)
+      return;
 
     $project = project_get_name($bug->project_id);
     $url = string_get_bug_view_url_with_fqdn($bug_id);
@@ -407,10 +414,19 @@ class MattermostPlugin extends MantisPlugin {
   }
 
   public function bugnote_add_edit($event, $bug_id, $bugnote_id) {
+    // Wenn vorher das event EVENT_UPDATE_BUG_DATA aufgerufen wurde, befinden wir uns auf einer
+    // kombinierten Seite (z.B. bug_change_status_page.php) - Da dann auch das Event EVENT_UPDATE_BUG
+    // aufgerufen wird, ignorieren wir hier das Event (ansonsten erfolgen zwei Benachrichtigungen).
+    if($this->oldBug)
+      return;
+
     $bug = bug_get($bug_id);
     $bugnote = bugnote_get($bugnote_id);
 
     $this->skip = $this->skip || gpc_get_bool('mattermost_skip') || $bug->view_state == VS_PRIVATE || $bugnote->view_state == VS_PRIVATE;
+
+    if($this->skip)
+      return;
 
     $project = project_get_name($bug->project_id);
     $url = string_get_bug_view_url_with_fqdn($bug_id, $bugnote_id);
