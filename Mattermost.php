@@ -237,7 +237,13 @@ class MattermostPlugin extends MantisPlugin {
             if ($bug->handler_id > 0)
               $channel = $handler;
             else
+            {
               $channel = $this->get_default_channel($bug->project_id);
+
+              // Fängt den Fall ab, dass der Standardkanal für dieses Projekt dem aktuellen Benutzer entspricht:
+              if($channel == $current)
+                $channel = false;
+            }
 
             $msg = sprintf('[%s] %s hat den Eintrag <%s|%s> erstellt', $project, $reporter, $url, $summary);
           }
@@ -402,6 +408,11 @@ class MattermostPlugin extends MantisPlugin {
     }
     else {
       $channel = $this->get_default_channel($bug->project_id);
+
+      // Fängt den Fall ab, dass der Standardkanal für dieses Projekt dem aktuellen Benutzer entspricht:
+      if($channel == $current)
+        $channel = false;
+
       $msg = sprintf('[%s] %s hat den Eintrag <%s|%s> gelöscht.', $project, $current, $url, $summary);
     }
 
@@ -446,8 +457,13 @@ class MattermostPlugin extends MantisPlugin {
         if($bug->handler_id !== auth_get_current_user_id()) {
           if ($bug->handler_id > 0)
             $channel = $handler;
-          else
+          else {
             $channel = $this->get_default_channel($bug->project_id);
+
+            // Fängt den Fall ab, dass der Standardkanal für dieses Projekt dem aktuellen Benutzer entspricht:
+            if($channel == $current)
+              $channel = false;
+          }
         }
 
         break;
